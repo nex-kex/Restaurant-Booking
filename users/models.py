@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from .validators import validate_phone_number
 
 
 class CustomUserManager(BaseUserManager):
@@ -29,10 +30,19 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    phone_number = models.CharField(max_length=11, unique=True, verbose_name="Номер телефона", help_text="87777777777")
-    email = models.EmailField(unique=True, verbose_name="Email", help_text="my_email@mail.com")
-    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Имя", help_text="Иван")
-    last_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Фамилия", help_text="Иванов")
+    """Класс для пользователей сайта."""
+
+    username = models.CharField(max_length=18, blank=True)
+    phone_number = models.CharField(
+        max_length=11,
+        unique=True,
+        verbose_name="Номер телефона",
+        help_text="Введите 11 цифр без дополнительных символов.",
+        validators=[validate_phone_number],
+    )
+    email = models.EmailField(unique=True, verbose_name="Email")
+    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Имя")
+    last_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Фамилия")
 
     token = models.CharField(max_length=100, blank=True, null=True, verbose_name="Токен")
     reset_password_token = models.CharField(
