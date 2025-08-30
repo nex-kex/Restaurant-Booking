@@ -29,7 +29,6 @@ class CustomUserCreationForm(FormControlMixin, PhoneNumberMixin, UserCreationFor
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.email = self.cleaned_data["email"].lower()
         user.username = self.beautify_phone_number(user.phone_number)
         if commit:
             user.save()
