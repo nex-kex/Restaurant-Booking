@@ -104,9 +104,9 @@ EMAIL_USE_SSL = True if os.getenv("EMAIL_USE_SSL") == "True" else False
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-# AUTH_USER_MODEL = "users.CustomUser"
-#
-# LOGIN_REDIRECT_URL =
-# LOGOUT_REDIRECT_URL =
-#
-# LOGIN_URL =
+AUTH_USER_MODEL = "users.CustomUser"
+
+# LOGIN_REDIRECT_URL = "booking:main"
+# LOGOUT_REDIRECT_URL = "booking:main"
+
+LOGIN_URL = "users:login"
