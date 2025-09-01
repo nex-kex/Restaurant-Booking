@@ -3,6 +3,7 @@ import secrets
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
@@ -11,12 +12,14 @@ from django.views import View
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
-from .forms import CustomUserCreationForm, PasswordEditForm, UserEditForm
+from .forms import (CustomUserCreationForm, LoginForm, PasswordEditForm,
+                    UserEditForm)
 from .models import CustomUser
 
 
-class LoginView(View):
+class CustomLoginView(LoginView):
     template_name = "users/login.html"
+    form_class = LoginForm
 
 
 class LogoutView(View):
@@ -29,21 +32,6 @@ class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "users/register.html"
     success_url = reverse_lazy("booking:main")
-
-    def form_valid(self, form):
-        try:
-            user = form.save()
-
-            token = secrets.token_hex(16)
-            user.token = token
-            user.save()
-
-            login(self.request, user)
-            return super().form_valid(form)
-
-        except IntegrityError:
-            form.add_error("phone_number", "Пользователь с таким номером телефона уже существует")
-            return self.form_invalid(form)
 
 
 class UserDetailView(DetailView):

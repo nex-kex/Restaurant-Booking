@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from users.mixins import FormControlMixin, PhoneNumberMixin
 
@@ -29,14 +29,9 @@ class CustomUserCreationForm(FormControlMixin, PhoneNumberMixin, UserCreationFor
             "last_name": forms.TextInput(attrs={"placeholder": "Иванов"}),
         }
 
-    @staticmethod
-    def beautify_phone_number(pn):
-        """Форматирование номера телефона в читаемый вид формата +7 (777) 777-77-77."""
-        return f"+7 ({pn[1:4]}) {pn[4:7]}-{pn[7:9]}-{pn[9:]}"
-
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.username = self.beautify_phone_number(user.phone_number)
+        user.username = user.phone_number
         if commit:
             user.save()
         return user
@@ -54,3 +49,10 @@ class PasswordEditForm(FormControlMixin, UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ()
+
+
+class LoginForm(FormControlMixin, AuthenticationForm):
+
+    class Meta(UserCreationForm.Meta):
+        model = CustomUser
+        fields = ("phone_number", "password")

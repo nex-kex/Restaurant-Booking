@@ -33,7 +33,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     """Класс для пользователей сайта."""
 
-    username = models.CharField(max_length=18, blank=True)
+    username = models.CharField(max_length=11, blank=True)
     phone_number = models.CharField(
         max_length=11,
         unique=True,

@@ -106,7 +106,7 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 AUTH_USER_MODEL = "users.CustomUser"
 
-# LOGIN_REDIRECT_URL = "booking:main"
-# LOGOUT_REDIRECT_URL = "booking:main"
+LOGIN_REDIRECT_URL = "booking:main"
+LOGOUT_REDIRECT_URL = "booking:main"
 
 LOGIN_URL = "users:login"
