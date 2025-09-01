@@ -12,11 +12,15 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h1 class="fw-bold mb-3">
-                                {% if object.first_name %}
-                                {{ object.first_name }}
-                                {% endif %}
-                                {% if object.last_name %}
-                                {{ object.last_name }}
+                                {% if object.first_name or  object.last_name %}
+                                    {% if object.first_name %}
+                                    {{ object.first_name }}
+                                    {% endif %}
+                                    {% if object.last_name %}
+                                    {{ object.last_name }}
+                                    {% endif %}
+                                {% else %}
+                                Имя не указано
                                 {% endif %}
                             </h1>
                             <h5 class="card-text mb-3">

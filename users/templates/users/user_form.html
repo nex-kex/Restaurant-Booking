@@ -17,10 +17,10 @@
                         <button type="submit" class="btn btn-primary m-2">
                             Сохранить
                         </button>
-                        <a type="submit" class="btn btn-secondary m-2" href="{% url 'users:user-detail' user.pk %}">
-                            Отмена
-                        </a>
-                        {% else %}
+                        {% elif user.is_authenticated %}
+                            <a type="submit" class="btn btn-secondary m-2" href="{% url 'users:user-detail' user.pk %}">
+                                Отмена
+                            </a>
                         {% endif %}
                     </form>
                 </div>

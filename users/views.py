@@ -70,9 +70,8 @@ class UserUpdatePasswordView(UpdateView):
     success_url = reverse_lazy("booking:main")
 
     def get_object(self, queryset=None):
-        # Если есть токен в URL - восстановления пароля
-        if "token" in self.kwargs:
-            user = get_object_or_404(CustomUser, pk=self.kwargs["pk"], reset_password_token=self.kwargs["token"])
+        if "reset_password_token" in self.kwargs:
+            user = get_object_or_404(CustomUser, pk=self.kwargs["pk"], reset_password_token=self.kwargs["reset_password_token"])
             return user
         return super().get_object(queryset)
 
@@ -80,8 +79,16 @@ class UserUpdatePasswordView(UpdateView):
         if "token" in self.kwargs:
             user = form.instance
             user.reset_password_token = None
+            user.set_password(form.cleaned_data["password1"])
             user.save()
-        return super().form_valid(form)
+
+        response = super().form_valid(form)
+        user = form.save()
+        login(self.request, user)
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy("booking:main")
 
 
 class UserDeleteView(DeleteView):
@@ -112,13 +119,13 @@ class UserForgotPassword(View):
         user.save()
 
         host = self.request.get_host()
-        url = f"http://{host}/users/{user.pk}/reset_password/{token}"
+        url = f"http://{host}/users/{user.pk}/update/password/{token}"
 
         self._send_reset_password_email(user.email, url)
 
-        return redirect("users:email_notification")
+        return redirect("users:email-notification")
 
     def _send_reset_password_email(self, email, url):
-        subject = "Восстановление пароля"
+        subject = f"Восстановление пароля"
         message = f"Для восстановления пароля перейдите по ссылке: {url}"
         send_mail(subject, message, os.getenv("EMAIL_HOST_USER"), [email])
