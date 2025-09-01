@@ -9,6 +9,14 @@ class MainPageTemplateView(TemplateView):
     template_name = "booking/main_page.html"
 
 
+class AboutPageTemplateView(TemplateView):
+    template_name = "booking/about.html"
+
+
+class BookingPageTemplateView(TemplateView):
+    template_name = "booking/book.html"
+
+
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm

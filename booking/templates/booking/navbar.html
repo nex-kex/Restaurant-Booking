@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'booking:main' %}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'booking:about' %}">О ресторане</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'booking:book' %}">Забронировать</a>
+                </li>
+
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'users:login' %}">Войти</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'users:register' %}">Зарегистрироваться</a>
+                </li>
+
+                {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'users:user-detail' user.pk %}" class="nav-link active">
+                        Профиль
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'users:logout' %}" style="display: inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn nav-link active">
+                            Выйти
+                        </button>
+                    </form>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>

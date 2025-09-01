@@ -1,0 +1,74 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<h1 class="text-center m-3">
+    Главная страница ресторана
+    <hr class="border border-primary border-1 opacity-75">
+</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="card border-primary m-4 p-3">
+                <h3 class="text-center">
+                    Описание ресторана
+                    <hr class="border border-primary border-1 opacity-75">
+                </h3>
+                <p>
+                    Наш ресторан известен тем, что...
+                </p>
+            </div>
+
+            <div class="card border-primary m-4 p-3">
+                <h3 class="text-center">
+                    Перечень предоставляемых услуг
+                    <hr class="border border-primary border-1 opacity-75">
+                </h3>
+                <p>
+                    Наш ресторан предоставляет такие услуги, как:
+                </p>
+            </div>
+
+            <div class="card border-primary m-4 p-3">
+                <h3 class="text-center">
+                    Контактная информация
+                    <hr class="border border-primary border-1 opacity-75">
+                </h3>
+                <p>
+                    Для связи с нами обратитесь по номеру...
+                </p>
+            </div>
+
+            <div class="card border-primary m-4 p-3">
+                <h3 class="text-center">
+                    Форма для обратной связи
+                    <hr class="border border-primary border-1 opacity-75">
+                </h3>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput" class="form-label">Имя</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput">
+                </div>
+                <div class="mb-3">
+                    <label for="basic-url" class="form-label">Почта</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon3">@</span>
+                        <input type="email" class="form-control" id="basic-url"
+                               aria-describedby="basic-addon3 basic-addon4">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Сообщение</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary">
+                    Отправить
+                </button>
+            </div>
+
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+{% endblock %}
