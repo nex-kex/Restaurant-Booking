@@ -13,14 +13,21 @@ class CustomUserCreationForm(FormControlMixin, PhoneNumberMixin, UserCreationFor
         model = CustomUser
         fields = ("phone_number", "email", "first_name", "last_name", "password1", "password2")
         extra_kwargs = {
-            "phone_number": {"required": True},
+            "phone_number": {"required": True, "placeholder": "87771234567"},
             "email": {"required": True},
             "first_name": {"required": False},
             "last_name": {"required": False},
             "password1": {"write_only": True},
             "password2": {"write_only": True},
         }
-        widgets = {"phone_number": forms.TextInput(attrs={"title": "Введите 11 цифр без дополнительных символов."})}
+        widgets = {
+            "phone_number": forms.TextInput(
+                attrs={"title": "Введите 11 цифр без дополнительных символов.", "placeholder": "87771234567"}
+            ),
+            "email": forms.TextInput(attrs={"placeholder": "my_email@mail.com"}),
+            "first_name": forms.TextInput(attrs={"placeholder": "Иван"}),
+            "last_name": forms.TextInput(attrs={"placeholder": "Иванов"}),
+        }
 
     @staticmethod
     def beautify_phone_number(pn):
