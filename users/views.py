@@ -33,13 +33,24 @@ class RegisterView(CreateView):
     template_name = "users/register.html"
     success_url = reverse_lazy("booking:main")
 
+    def form_valid(self, form):
+        user = form.save()
+        token = secrets.token_hex(16)
+        user.token = token
+        user.save()
+
+        response = super().form_valid(form)
+        user = form.save()
+        login(self.request, user)
+        return response
+
 
 class UserDetailView(DetailView):
     model = CustomUser
     template_name = "users/user_detail.html"
 
 
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(ListView):
     model = CustomUser
 
 
@@ -47,7 +58,9 @@ class UserUpdateView(UpdateView):
     model = CustomUser
     template_name = "users/user_form.html"
     form_class = UserEditForm
-    success_url = reverse_lazy("booking:main")
+
+    def get_success_url(self):
+        return reverse_lazy("users:user-detail", kwargs={'pk': self.object.pk})
 
 
 class UserUpdatePasswordView(UpdateView):

@@ -1,0 +1,44 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-primary m-3 p-3">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h1 class="fw-bold mb-3">
+                                {% if object.first_name %}
+                                {{ object.first_name }}
+                                {% endif %}
+                                {% if object.last_name %}
+                                {{ object.last_name }}
+                                {% endif %}
+                            </h1>
+                            <h5 class="card-text mb-3">
+                                Email: {{ object.email }}
+                            </h5>
+                            <h5 class="card-text mb-3">
+                                Телефон: {{ object.phone_number }}
+                            </h5>
+                            <div>
+                                <form method="post">
+                                    <a href="{% url 'users:user-update' object.pk %}"
+                                       class="btn btn-outline-primary">Редактировать профиль</a>
+                                    <a href="{% url 'users:password-update' object.pk %}"
+                                       class="btn btn-outline-primary">Изменить пароль</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
