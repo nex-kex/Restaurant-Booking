@@ -30,10 +30,10 @@ class Table(models.Model):
     seats = models.PositiveSmallIntegerField(verbose_name="Количество мест")
     price = models.IntegerField(verbose_name="Цена бронирования")
     time_open = models.TimeField(
-        default=datetime.strptime(os.getenv("TIME_OPEN"), "%H:%M:%S").time(), verbose_name="Время начала бронирования"
+        default=datetime.strptime(os.getenv("TIME_OPEN", "00:00:00"), "%H:%M:%S").time(), verbose_name="Время начала бронирования"
     )
     time_close = models.TimeField(
-        default=datetime.strptime(os.getenv("TIME_CLOSE"), "%H:%M:%S").time(),
+        default=datetime.strptime(os.getenv("TIME_CLOSE", "00:00:00"), "%H:%M:%S").time(),
         verbose_name="Время окончания бронирования",
     )
     comment = models.TextField(blank=True, null=True, verbose_name="Дополнительные комментарии")
@@ -48,7 +48,7 @@ class Table(models.Model):
     class Meta:
         verbose_name = "Стол"
         verbose_name_plural = "Столы"
-        ordering = ["price"]
+        ordering = ["-price"]
 
 
 class Booking(models.Model):
@@ -60,15 +60,18 @@ class Booking(models.Model):
     user = models.ForeignKey(
         CustomUser, on_delete=models.DO_NOTHING, related_name="user_bookings", verbose_name="Пользователь"
     )
-    status = models.CharField(max_length=9, choices=statuses, default=statuses[0], verbose_name="Статус")
+    status = models.CharField(max_length=9, choices=statuses, default="active", verbose_name="Статус")
     people = models.SmallIntegerField(verbose_name="Количество персон")
     date = models.DateTimeField(verbose_name="Дата и время брони")
     duration = models.TimeField(default=timedelta(hours=1), verbose_name="Продолжительность брони")
 
     def __str__(self):
-        return f"Бронь на {self.date} пользователем {self.user}"
+        return (
+            f"Бронирование номер {self.id} на {self.date.strftime('%d.%m.%Y %H:%M:%S')} "
+            f"пользователем с номером {self.user.phone_number}"
+        )
 
     class Meta:
-        verbose_name = "Бронь"
-        verbose_name_plural = "Брони"
+        verbose_name = "Бронирование"
+        verbose_name_plural = "Бронирования"
         ordering = ["status", "date"]

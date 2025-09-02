@@ -3,7 +3,7 @@ name = "restaurantbooking"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Mark Volkov",email = "markasch67@gmail.com"}
+    { name = "Mark Volkov", email = "markasch67@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.13"
@@ -29,3 +29,6 @@ line-length = 119
 
 [tool.mypy]
 ignore_missing_imports = true
+exclude = [
+    "config/",
+]

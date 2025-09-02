@@ -9,7 +9,6 @@ urlpatterns = [
     # Pages
     path("", views.MainPageTemplateView.as_view(), name="main"),
     path("about/", views.AboutPageTemplateView.as_view(), name="about"),
-    path("book/", views.BookingPageTemplateView.as_view(), name="book"),
     # Categories
     path("category/", views.CategoryListView.as_view(), name="category-list"),
     path("category/create/", views.CategoryCreateView.as_view(), name="category-create"),

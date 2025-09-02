@@ -10,7 +10,7 @@
                     <a class="nav-link active" href="{% url 'booking:about' %}">О ресторане</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'booking:book' %}">Забронировать</a>
+                    <a class="nav-link active" href="{% url 'booking:booking-create' %}">Забронировать</a>
                 </li>
 
                 {% if user.is_authenticated %}

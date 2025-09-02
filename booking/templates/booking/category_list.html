@@ -1,0 +1,28 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Категории{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row text-center">
+        {% for category_data in categories_with_count %}
+        <div class="col-6">
+            <div class="card my-3">
+                <div class="card-header">
+                    <h2>{{ category_data.category.name }}</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Описание: {{ category_data.category.description }}</p>
+                    <p class="card-text">
+                        Количество столиков: {{ category_data.table_count }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

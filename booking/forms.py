@@ -16,7 +16,8 @@ class TableForm(FormControlMixin, forms.ModelForm):
 
     class Meta:
         model = Table
-        fields = "__all__"
+        fields = ["seats", "price", "time_open", "time_close", "comment", "is_available", "category"]
+        widgets = {"is_available": forms.CheckboxInput()}
 
 
 class BookingForm(FormControlMixin, forms.ModelForm):
@@ -25,3 +26,8 @@ class BookingForm(FormControlMixin, forms.ModelForm):
         model = Booking
         fields = "__all__"
         exclude = ["user", "status"]
+
+    # Сортировка столов для бронирования - выбрать можно только из тех, что доступны
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["table"].queryset = Table.objects.filter(is_available=True)

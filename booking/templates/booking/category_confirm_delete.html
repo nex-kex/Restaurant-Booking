@@ -1,0 +1,28 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Удаление{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card my-3 p-3">
+            <h1 class="mb-4">Удаление категории</h1>
+            <p>Вы действительно хотите удалить "{{ object }}"?</p>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger m-2">
+                        Удалить
+                    </button>
+                    <a class="btn" class="btn btn-secondary m-2" href="{% url 'booking:category-detail' object.pk %}">
+                        Отмена
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% block content %}
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card border-primary m-4 p-3">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    {% if object %}
+                    <button type="submit" class="btn btn-primary m-2">
+                        Сохранить изменения
+                    </button>
+                    <a type="submit" class="btn btn-secondary m-2" href="{% url 'booking:main' %}">
+                        Отмена
+                    </a>
+
+                    {% else %}
+                    <button type="submit" class="btn btn-primary">
+                        Создать
+                    </button>
+
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+{% endblock %}

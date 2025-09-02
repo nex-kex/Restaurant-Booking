@@ -2,10 +2,8 @@ import os
 import secrets
 
 from django.contrib.auth import login
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
-from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
@@ -60,7 +58,7 @@ class UserUpdateView(UpdateView):
     form_class = UserEditForm
 
     def get_success_url(self):
-        return reverse_lazy("users:user-detail", kwargs={'pk': self.object.pk})
+        return reverse_lazy("users:user-detail", kwargs={"pk": self.object.pk})
 
 
 class UserUpdatePasswordView(UpdateView):
@@ -71,7 +69,9 @@ class UserUpdatePasswordView(UpdateView):
 
     def get_object(self, queryset=None):
         if "reset_password_token" in self.kwargs:
-            user = get_object_or_404(CustomUser, pk=self.kwargs["pk"], reset_password_token=self.kwargs["reset_password_token"])
+            user = get_object_or_404(
+                CustomUser, pk=self.kwargs["pk"], reset_password_token=self.kwargs["reset_password_token"]
+            )
             return user
         return super().get_object(queryset)
 
@@ -126,6 +126,6 @@ class UserForgotPassword(View):
         return redirect("users:email-notification")
 
     def _send_reset_password_email(self, email, url):
-        subject = f"Восстановление пароля"
+        subject = "Восстановление пароля"
         message = f"Для восстановления пароля перейдите по ссылке: {url}"
         send_mail(subject, message, os.getenv("EMAIL_HOST_USER"), [email])
