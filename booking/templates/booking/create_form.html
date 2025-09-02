@@ -10,15 +10,15 @@
                     {{ form.as_p }}
 
                     {% if object %}
-                    <button type="submit" class="btn btn-primary m-2">
-                        Сохранить изменения
+                    <button type="submit" class="btn btn-outline-primary">
+                        Сохранить
                     </button>
-                    <a type="submit" class="btn btn-secondary m-2" href="{% url 'booking:main' %}">
+                    <a type="submit" class="btn btn-outline-secondary" href="{% url 'users:user-detail' user.pk %}">
                         Отмена
                     </a>
 
                     {% else %}
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-outline-primary">
                         Создать
                     </button>
 

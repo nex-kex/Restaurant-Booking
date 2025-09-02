@@ -14,13 +14,12 @@
                         {% csrf_token %}
                         {{ form.as_p }}
                         {% if object %}
-                        <button type="submit" class="btn btn-primary m-2">
+                        <button type="submit" class="btn btn-outline-primary">
                             Сохранить
                         </button>
-                        {% elif user.is_authenticated %}
-                            <a type="submit" class="btn btn-secondary m-2" href="{% url 'users:user-detail' user.pk %}">
-                                Отмена
-                            </a>
+                        <a type="submit" class="btn btn-outline-secondary" href="{% url 'users:user-detail' user.pk %}">
+                            Отмена
+                        </a>
                         {% endif %}
                     </form>
                 </div>

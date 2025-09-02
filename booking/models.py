@@ -74,4 +74,4 @@ class Booking(models.Model):
     class Meta:
         verbose_name = "Бронирование"
         verbose_name_plural = "Бронирования"
-        ordering = ["status", "date"]
+        ordering = ["date"]

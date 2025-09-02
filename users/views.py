@@ -10,6 +10,7 @@ from django.views import View
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
+from booking.models import Booking
 from .forms import (CustomUserCreationForm, LoginForm, PasswordEditForm,
                     UserEditForm)
 from .models import CustomUser
@@ -46,6 +47,12 @@ class RegisterView(CreateView):
 class UserDetailView(DetailView):
     model = CustomUser
     template_name = "users/user_detail.html"
+
+    # Список бронирований отдельного пользователя
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user_bookings"] = Booking.objects.filter(user=self.request.user)
+        return context
 
 
 class UserListView(ListView):
