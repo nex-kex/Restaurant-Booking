@@ -2,7 +2,15 @@ from django import forms
 
 from users.mixins import FormControlMixin
 
-from .models import Booking, Category, Table
+from .models import Booking, Category, Table, Feedback
+
+
+class FeedbackForm(FormControlMixin, forms.ModelForm):
+
+    class Meta:
+        model = Feedback
+        fields = "__all__"
+        exclude = ["is_solved"]
 
 
 class CategoryForm(FormControlMixin, forms.ModelForm):
