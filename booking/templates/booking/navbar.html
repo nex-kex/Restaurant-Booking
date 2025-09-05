@@ -38,7 +38,11 @@
                         </button>
                     </form>
                 </li>
-
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'booking:feedback-list' %}">Обратная связь</a>
+                </li>
+                {% endif %}
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'users:login' %}">Войти</a>
