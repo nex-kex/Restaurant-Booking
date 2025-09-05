@@ -23,17 +23,11 @@
                         </small></p>
                     {% endif %}
 
-                    {% if table.is_available %}
+                    {% if not table.is_available %}
+                    <p><small>Сейчас не доступно</small></p>
+                    {% endif %}
                     <a href="{% url 'booking:table-detail' table.pk %}"
                        class="btn btn-lg btn-block btn-outline-primary m-1">Подробнее</a>
-                    {% else %}
-                    <p>Сейчас не доступно</p>
-                    {% endif %}
-
-                    <a href="{% url 'booking:table-update' table.pk %}"
-                       class="btn btn-outline-secondary">Редактировать</a>
-                    <a href="{% url 'booking:table-delete' table.pk %}"
-                       class="btn btn-outline-danger">Удалить</a>
                 </div>
             </div>
             </div>

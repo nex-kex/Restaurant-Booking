@@ -87,10 +87,13 @@ class CategoryListView(ListView):
         context["categories_with_count"] = categories_with_count
         return context
 
-    # Возвращает только те категории, в которых есть доступные для брони столы
+    # Возвращает только те категории, в которых есть доступные для брони столы для обычных пользователй
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(tables__is_available=True).distinct()
+        if not self.request.user.is_staff:
+            return queryset.filter(tables__is_available=True).distinct()
+        else:
+            return queryset
 
 
 class CategoryUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
@@ -122,7 +125,10 @@ class TableListView(ListView):
     # Возвращает только те столы, которые доступны для брони
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(is_available=True)
+        if not self.request.user.is_staff:
+            return queryset.filter(is_available=True)
+        else:
+            return queryset
 
 
 class TableUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
