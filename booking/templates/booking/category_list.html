@@ -16,7 +16,23 @@
                     <p class="card-text">
                         Описание: {{ category_data.category.description }}</p>
                     <p class="card-text">
-                        Количество столиков: {{ category_data.table_count }}
+                        {% if user.is_staff %}
+                        <p>
+                            Количество доступных столиков: {{ category_data.available_table_count }}
+                        </p>
+                        Количество столиков всего:
+                        <a class="btn btn-outline-primary"
+                           href="{% url 'booking:category-tables' category_data.category.pk %}">
+                            {{ category_data.total_table_count }}
+                        </a>
+
+                        {% else %}
+                        Количество доступных столиков:
+                        <a class="btn btn-outline-primary"
+                           href="{% url 'booking:category-tables' category_data.category.pk %}">
+                            {{ category_data.available_table_count }}
+                        </a>
+                        {% endif %}
                     </p>
                 </div>
             </div>

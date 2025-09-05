@@ -16,13 +16,17 @@
         <div class="col-8">
             <div class="card m-3">
                 <div class="card-body">
-                    <h1>Столик для {{ object.seats }}-х</h1>
+                    <h3>Столик для {{ object.seats }}-х чел.</h3>
                     {% if object.category %}
-                        <p class="card-text"><small class="text-body-secondary">
+                    <h3>Категория:</h3>
+                        <p class="card-text">
                             {{ object.category }}
-                        </small></p>
+                        </p>
                     {% endif %}
-                    <h3>Цена: {{ object.price }} руб.</h3>
+                    <h3>Цена:</h3>
+                    <p class="card-text">
+                        {{ object.price }} руб.
+                    </p>
                     {% if object.comment %}
                     <h3>Комментарии:</h3>
                     <p class="card-text">
@@ -33,8 +37,10 @@
                     <p class="card-text">
                         Столик обслуживается с {{ object.time_open | time:"H:i" }} до {{ object.time_close | time:"H:i" }}
                     </p>
-                    {% if object.is_available == True %}
-                    <button class="btn btn-success" type="button">Забронировать</button>
+
+                    {% if user.is_staff %}
+                        <a href="{% url 'booking:table-update' object.pk %}" class="btn btn-outline-secondary">Редактировать</a>
+                        <a href="{% url 'booking:table-delete' object.pk %}" class="btn btn-outline-danger">Удалить</a>
                     {% endif %}
 
                 </div>

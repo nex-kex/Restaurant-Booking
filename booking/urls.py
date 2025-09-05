@@ -16,6 +16,7 @@ urlpatterns = [
     path("feedback/<int:pk>/status/", views.FeedbackChangeStatus.as_view(), name="feedback-change-status"),
     # Categories
     path("category/", views.CategoryListView.as_view(), name="category-list"),
+    path("category/<int:pk>/tables/", views.CategoryTableListView.as_view(), name="category-tables"),
     path("category/create/", views.CategoryCreateView.as_view(), name="category-create"),
     path("category/<int:pk>/", views.CategoryDetailView.as_view(), name="category-detail"),
     path("category/<int:pk>/update/", views.CategoryUpdateView.as_view(), name="category-update"),

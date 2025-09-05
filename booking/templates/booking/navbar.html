@@ -9,8 +9,19 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'booking:about' %}">О ресторане</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'booking:booking-create' %}">Забронировать</a>
+                    <a class="dropdown-toggle p-2 btn btn-primary" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Забронировать
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'booking:category-list' %}">Посмотреть категории</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'booking:table-list' %}">Посмотреть столики</a></li>
+                        <li><a class="dropdown-item" href="{% url 'booking:booking-create' %}">Форма для
+                            бронирования</a></li>
+                    </ul>
                 </li>
 
                 {% if user.is_authenticated %}

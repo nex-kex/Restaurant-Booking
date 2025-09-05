@@ -82,8 +82,9 @@ class CategoryListView(ListView):
         categories_with_count = []
 
         for category in context["categories"]:
-            table_count = Table.objects.filter(category=category, is_available=True).count()
-            categories_with_count.append({"category": category, "table_count": table_count})
+            total_table_count = Table.objects.filter(category=category).count()
+            available_table_count = Table.objects.filter(category=category, is_available=True).count()
+            categories_with_count.append({"category": category, "available_table_count": available_table_count, "total_table_count": total_table_count})
         context["categories_with_count"] = categories_with_count
         return context
 
@@ -125,6 +126,19 @@ class TableListView(ListView):
     # Возвращает только те столы, которые доступны для брони
     def get_queryset(self):
         queryset = super().get_queryset()
+        if not self.request.user.is_staff:
+            return queryset.filter(is_available=True)
+        else:
+            return queryset
+
+
+class CategoryTableListView(ListView):
+    model = Table
+
+    # Возвращает только доступные столы из определённой категории
+    def get_queryset(self):
+        category_id = self.kwargs.get("pk")
+        queryset = super().get_queryset().filter(category_id=category_id)
         if not self.request.user.is_staff:
             return queryset.filter(is_available=True)
         else:
