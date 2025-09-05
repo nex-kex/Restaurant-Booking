@@ -1,0 +1,49 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Обратная связь{% endblock %}
+
+{% block content %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+        {{ object }}
+    </h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="card m-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        Имя: {{ object.name }}
+                    </p>
+                    <p class="card-text">
+                        Телефон: {{ object.phone_number }}
+                    </p>
+                    <p class="card-text">
+                        Дата создания: {{ object.created_at | date:"d.m.Y" }}
+                    </p>
+                    <p class="card-text">
+                        Сообщение: {{ object.text }}
+                    </p>
+
+                    {% if object.is_solved %}
+                    <a class="btn btn-outline-success" href="{% url 'booking:feedback-change-status' feedback.pk %}">
+                        Решена
+                    </a>
+                    {% else %}
+                    <a class="btn btn-outline-danger" href="{% url 'booking:feedback-change-status' feedback.pk %}">
+                        Решить
+                    </a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+{% endblock %}

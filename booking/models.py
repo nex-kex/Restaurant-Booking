@@ -5,6 +5,7 @@ from django.db import models
 from dotenv import load_dotenv
 
 from users.models import CustomUser
+from users.validators import validate_phone_number
 
 load_dotenv(override=True)
 
@@ -75,3 +76,18 @@ class Booking(models.Model):
         verbose_name = "Бронирование"
         verbose_name_plural = "Бронирования"
         ordering = ["date"]
+
+
+class Feedback(models.Model):
+    """Класс для описания сообщений обратной связи."""
+
+    name = models.CharField(max_length=50, verbose_name="Имя")
+    phone_number = models.CharField(max_length=11, validators=[validate_phone_number], verbose_name="Номер телефона")
+    text = models.TextField(verbose_name="Сообщение")
+    created_at = models.DateField(auto_now_add=True, verbose_name="Дата создания")
+    is_solved = models.BooleanField(default=False, verbose_name="Обработана")
+
+    class Meta:
+        verbose_name = "Обратная связь"
+        verbose_name_plural = "Обратная связь"
+        ordering = ["created_at"]

@@ -1,17 +1,63 @@
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
-from .forms import BookingForm, CategoryForm, TableForm
-from .models import Booking, Category, Table
+from .forms import BookingForm, CategoryForm, TableForm, FeedbackForm
+from .models import Booking, Category, Table, Feedback
 
 
 class MainPageTemplateView(TemplateView):
     template_name = "booking/main_page.html"
 
+    # Добавляет форму обратной связи в контекст главной страницы
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["feedback_form"] = FeedbackForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('booking:main')
+        # Если форма невалидна, показываем с ошибками
+        context = self.get_context_data()
+        context['feedback_form'] = form
+        return self.render_to_response(context)
+
 
 class AboutPageTemplateView(TemplateView):
     template_name = "booking/about.html"
+
+
+class FeedbackCreateView(CreateView):
+    model = Feedback
+    form_class = FeedbackForm
+    success_url = reverse_lazy("booking:main")
+    template_name = "booking/main.html"
+
+
+class FeedbackDetailView(DetailView):
+    model = Feedback
+
+
+class FeedbackListView(ListView):
+    model = Feedback
+    paginate_by = 10
+
+
+class FeedbackChangeStatus(UpdateView):
+    model = Feedback
+    fields = []
+    success_url = reverse_lazy("booking:feedback-list")
+    template_name = "booking/feedback_change_status.html"
+
+    def form_valid(self, form):
+        current_status = self.object.is_solved
+        self.object.is_solved = not current_status
+        self.object.save()
+        return super().form_valid(form)
 
 
 class CategoryCreateView(CreateView):
