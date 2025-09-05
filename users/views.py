@@ -16,6 +16,7 @@ from booking.models import Booking
 from .forms import (CustomUserCreationForm, LoginForm, PasswordEditForm,
                     UserEditForm)
 from .models import CustomUser
+from .mixins import PersonalDataMixin
 
 
 class CustomLoginView(LoginView):
@@ -46,7 +47,7 @@ class RegisterView(CreateView):
         return response
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(LoginRequiredMixin, PersonalDataMixin, DetailView):
     model = CustomUser
     template_name = "users/user_detail.html"
 
@@ -57,43 +58,18 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context["user_bookings"] = Booking.objects.filter(user=user)
         return context
 
-    # Запрещает обычному пользователю просматривать чужие профили
-    def get_object(self, **kwargs):
-        user_profile = super().get_object()
-        user = self.request.user
-        if not user.is_staff:
-            if user != user_profile:
-                raise PermissionDenied("У вас нет прав для доступа к этой странице.")
-        return user_profile
 
-
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(LoginRequiredMixin, PersonalDataMixin, ListView):
     model = CustomUser
 
-    # Запрещает обычному пользователю просматривать чужие профили
-    def get_queryset(self, **kwargs):
-        user = self.request.user
-        if not user.is_staff:
-            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
-        return CustomUser.objects.all()
 
-
-class UserUpdateView(LoginRequiredMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, PersonalDataMixin, UpdateView):
     model = CustomUser
     template_name = "users/user_form.html"
     form_class = UserEditForm
 
     def get_success_url(self):
         return reverse_lazy("users:user-detail", kwargs={"pk": self.object.pk})
-
-    # Запрещает обычному пользователю изменять чужие профили
-    def get_object(self, **kwargs):
-        user_profile = super().get_object()
-        user = self.request.user
-        if not user.is_staff:
-            if user != user_profile:
-                raise PermissionDenied("У вас нет прав для доступа к этой странице.")
-        return user_profile
 
 
 class UserUpdatePasswordView(LoginRequiredMixin, UpdateView):

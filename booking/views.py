@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
@@ -5,6 +6,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from .forms import BookingForm, CategoryForm, TableForm, FeedbackForm
 from .models import Booking, Category, Table, Feedback
+from users.mixins import StaffRequiredMixin
 
 
 class MainPageTemplateView(TemplateView):
@@ -38,16 +40,16 @@ class FeedbackCreateView(CreateView):
     template_name = "booking/main.html"
 
 
-class FeedbackDetailView(DetailView):
+class FeedbackDetailView(LoginRequiredMixin, StaffRequiredMixin, DetailView):
     model = Feedback
 
 
-class FeedbackListView(ListView):
+class FeedbackListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     model = Feedback
     paginate_by = 10
 
 
-class FeedbackChangeStatus(UpdateView):
+class FeedbackChangeStatus(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Feedback
     fields = []
     success_url = reverse_lazy("booking:feedback-list")
@@ -60,7 +62,7 @@ class FeedbackChangeStatus(UpdateView):
         return super().form_valid(form)
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     success_url = reverse_lazy("booking:category-list")
@@ -91,7 +93,7 @@ class CategoryListView(ListView):
         return queryset.filter(tables__is_available=True).distinct()
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
 
@@ -99,12 +101,12 @@ class CategoryUpdateView(UpdateView):
         return reverse_lazy("booking:category-detail", kwargs={"pk": self.object.pk})
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Category
     success_url = reverse_lazy("booking:category-list")
 
 
-class TableCreateView(CreateView):
+class TableCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Table
     form_class = TableForm
     success_url = reverse_lazy("booking:table-list")
@@ -123,7 +125,7 @@ class TableListView(ListView):
         return queryset.filter(is_available=True)
 
 
-class TableUpdateView(UpdateView):
+class TableUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Table
     form_class = TableForm
 
@@ -131,12 +133,12 @@ class TableUpdateView(UpdateView):
         return reverse_lazy("booking:table-detail", kwargs={"pk": self.object.pk})
 
 
-class TableDeleteView(DeleteView):
+class TableDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Table
     success_url = reverse_lazy("booking:table-list")
 
 
-class BookingCreateView(CreateView):
+class BookingCreateView(LoginRequiredMixin, CreateView):
     model = Booking
     form_class = BookingForm
     success_url = reverse_lazy("booking:booking-list")
@@ -162,15 +164,15 @@ class BookingCreateView(CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class BookingDetailView(DetailView):
+class BookingDetailView(LoginRequiredMixin, DetailView):
     model = Booking
 
 
-class BookingListView(ListView):
+class BookingListView(LoginRequiredMixin, ListView):
     model = Booking
 
 
-class BookingUpdateView(UpdateView):
+class BookingUpdateView(LoginRequiredMixin, UpdateView):
     model = Booking
     form_class = BookingForm
 
@@ -178,6 +180,6 @@ class BookingUpdateView(UpdateView):
         return reverse_lazy("booking:booking-detail", kwargs={"pk": self.object.pk})
 
 
-class BookingDeleteView(DeleteView):
+class BookingDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Booking
     success_url = reverse_lazy("booking:booking-list")
