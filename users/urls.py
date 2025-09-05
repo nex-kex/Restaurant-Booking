@@ -22,4 +22,6 @@ urlpatterns = [
     path("<int:pk>/update/password/<str:token>/", views.UserUpdatePasswordView.as_view(), name="password-reset"),
     path("new_password/", views.UserForgotPassword.as_view(), name="new-password-request"),
     path("email_notification/", views.EmailNotification.as_view(), name="email-notification"),
+    # User delete
+    path("<int:pk>/delete/", views.UserDeleteView.as_view(), name="user-delete"),
 ]

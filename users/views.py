@@ -2,7 +2,9 @@ import os
 import secrets
 
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -21,7 +23,7 @@ class CustomLoginView(LoginView):
     form_class = LoginForm
 
 
-class LogoutView(View):
+class LogoutView(LoginRequiredMixin, View):
     template_name = "users/logout.html"
     next_page = reverse_lazy("booking:main")
 
@@ -44,22 +46,39 @@ class RegisterView(CreateView):
         return response
 
 
-class UserDetailView(DetailView):
+class UserDetailView(LoginRequiredMixin, DetailView):
     model = CustomUser
     template_name = "users/user_detail.html"
 
     # Список бронирований отдельного пользователя
     def get_context_data(self, **kwargs):
+        user = self.object
         context = super().get_context_data(**kwargs)
-        context["user_bookings"] = Booking.objects.filter(user=self.request.user)
+        context["user_bookings"] = Booking.objects.filter(user=user)
         return context
 
+    # Запрещает обычному пользователю просматривать чужие профили
+    def get_object(self, **kwargs):
+        user_profile = super().get_object()
+        user = self.request.user
+        if not user.is_staff:
+            if user != user_profile:
+                raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return user_profile
 
-class UserListView(ListView):
+
+class UserListView(LoginRequiredMixin, ListView):
     model = CustomUser
 
+    # Запрещает обычному пользователю просматривать чужие профили
+    def get_queryset(self, **kwargs):
+        user = self.request.user
+        if not user.is_staff:
+            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return CustomUser.objects.all()
 
-class UserUpdateView(UpdateView):
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     template_name = "users/user_form.html"
     form_class = UserEditForm
@@ -67,20 +86,37 @@ class UserUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy("users:user-detail", kwargs={"pk": self.object.pk})
 
+    # Запрещает обычному пользователю изменять чужие профили
+    def get_object(self, **kwargs):
+        user_profile = super().get_object()
+        user = self.request.user
+        if not user.is_staff:
+            if user != user_profile:
+                raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return user_profile
 
-class UserUpdatePasswordView(UpdateView):
+
+class UserUpdatePasswordView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     template_name = "users/user_form.html"
     form_class = PasswordEditForm
     success_url = reverse_lazy("booking:main")
 
-    def get_object(self, queryset=None):
+    def get_object(self, **kwargs):
+
+        # Запрещает любому пользователю изменять чужие профили
+        user_profile = super().get_object()
+        user = self.request.user
+        if user != user_profile:
+            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+
         if "reset_password_token" in self.kwargs:
             user = get_object_or_404(
                 CustomUser, pk=self.kwargs["pk"], reset_password_token=self.kwargs["reset_password_token"]
             )
             return user
-        return super().get_object(queryset)
+
+        return user_profile
 
     def form_valid(self, form):
         if "token" in self.kwargs:
@@ -98,9 +134,16 @@ class UserUpdatePasswordView(UpdateView):
         return reverse_lazy("booking:main")
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = CustomUser
     success_url = reverse_lazy("booking:main")
+
+    # Запрещает обычному пользователю удалять профили
+    def get_object(self, **kwargs):
+        user = self.request.user
+        if not user.is_staff:
+            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return super().get_object()
 
 
 class EmailNotification(TemplateView):
@@ -116,6 +159,7 @@ class UserForgotPassword(View):
     def post(self, request):
         email = request.POST.get("email")
 
+        # Если такого пользователя нет в системе, перенаправляет на регистрацию
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:

@@ -31,8 +31,10 @@
                     <form method="post">
                         <a href="{% url 'users:user-update' object.pk %}"
                            class="btn btn-outline-primary">Редактировать профиль</a>
+                        {% if user.pk == object.pk %}
                         <a href="{% url 'users:password-update' object.pk %}"
                            class="btn btn-outline-primary">Изменить пароль</a>
+                        {% endif %}
                     </form>
                 </div>
             </div>

@@ -1,0 +1,41 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Удаление{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card my-3 p-3">
+            <h1 class="mb-4">Удаление пользователя</h1>
+            <p>Вы хотите удалить пользователя со следующими данными:</p>
+
+            <ul class="list-group">
+                {% if object.first_name %}
+                <li class="list-group-item">Имя: {{ object.first_name }}</li>
+                {% endif %}
+                {% if object.last_name %}
+                <li class="list-group-item">Фамилия: {{ object.last_name }}</li>
+                {% endif %}
+                <li class="list-group-item">Телефон: {{ object.phone_number }}</li>
+                <li class="list-group-item">Email: {{ object.email }}</li>
+            </ul>
+
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger m-2">
+                        Удалить
+                    </button>
+                    <a class="btn" class="btn btn-secondary m-2" href="{% url 'users:user-detail' object.pk %}">
+                        Отмена
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+{% endblock %}
