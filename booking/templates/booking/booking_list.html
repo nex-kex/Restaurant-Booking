@@ -29,7 +29,7 @@
                     {{ booking.pk }}
                 </a>
             </th>
-            <td>{{ booking.date | date:"d.m.Y" }}</td>
+            <td>{{ booking.date | date:"d.m.Y H:i:s" }}</td>
             <td>{{ booking.table }}</td>
             <td>{{ booking.duration | time:"H:i:s" }}</td>
             <td>{{ booking.people }}</td>

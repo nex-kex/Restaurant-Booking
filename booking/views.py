@@ -1,3 +1,6 @@
+from datetime import timedelta
+from django.utils import timezone
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -84,7 +87,8 @@ class CategoryListView(ListView):
         for category in context["categories"]:
             total_table_count = Table.objects.filter(category=category).count()
             available_table_count = Table.objects.filter(category=category, is_available=True).count()
-            categories_with_count.append({"category": category, "available_table_count": available_table_count, "total_table_count": total_table_count})
+            categories_with_count.append({"category": category, "available_table_count": available_table_count,
+                                          "total_table_count": total_table_count})
         context["categories_with_count"] = categories_with_count
         return context
 
@@ -163,19 +167,62 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
     form_class = BookingForm
     success_url = reverse_lazy("booking:booking-list")
 
-    # Сразу сохраняет пользователя, без необходимости указывать самостоятельно
     def form_valid(self, form):
+        # Сразу сохраняет пользователя, без необходимости указывать самостоятельно
         booking_instance = form.save(commit=False)
         user = self.request.user
         booking_instance.user = user
+
+        # Проверяем доступность стола
+        table = form.cleaned_data.get("table")
+        date = form.cleaned_data.get("date")
+        duration = form.cleaned_data.get("duration")
+        timedelta_duration = timedelta(
+            hours=duration.hour,
+            minutes=duration.minute,
+            seconds=duration.second
+        )
+
+        start_datetime = date
+        end_datetime = start_datetime + timedelta_duration
+        print(start_datetime, end_datetime)
+
+        overlapping_bookings = Booking.objects.filter(
+            table=table,
+            status="active"
+        ).exclude(pk=booking_instance.pk if booking_instance.pk else None)
+
+        for booking in overlapping_bookings:
+            # Получаем время начала и окончания существующей брони
+            booking_start = booking.date
+
+            booking_duration = timedelta(
+                hours=booking.duration.hour,
+                minutes=booking.duration.minute,
+                seconds=booking.duration.second
+            )
+            booking_end = booking_start + booking_duration
+
+            # Проверяем пересечение временных интервалов
+            if (start_datetime <= booking_start < end_datetime) or (start_datetime < booking_end <= end_datetime) \
+                    or (start_datetime <= booking_start <= booking_end <= end_datetime):
+                print(booking_start, booking_end)
+                start = timezone.localtime(booking_start).strftime('%H:%M:%S')
+                end = timezone.localtime(booking_end).strftime('%H:%M:%S')
+                form.add_error(
+                    "table",
+                    f"Этот стол уже забронирован с {start} до {end}"
+                )
+                return self.form_invalid(form)
+
         booking_instance.save()
         return super().form_valid(form)
 
-    # Проверяет, чтобы количество людей не превышало число доступных мест
     def form_invalid(self, form):
         seats = form.cleaned_data.get("people")
         table = form.cleaned_data.get("table")
 
+        # Проверяет, чтобы количество людей не превышало число доступных мест
         if seats and table and seats > table.seats:
             form.add_error(
                 "table", f"Стол который вы выбрали рассчитан на {table.seats} мест. Выберете другой столик."
