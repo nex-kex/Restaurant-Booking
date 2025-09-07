@@ -31,7 +31,8 @@ class Table(models.Model):
     seats = models.PositiveSmallIntegerField(verbose_name="Количество мест")
     price = models.IntegerField(verbose_name="Цена бронирования")
     time_open = models.TimeField(
-        default=datetime.strptime(os.getenv("TIME_OPEN", "00:00:00"), "%H:%M:%S").time(), verbose_name="Время начала бронирования"
+        default=datetime.strptime(os.getenv("TIME_OPEN", "00:00:00"), "%H:%M:%S").time(),
+        verbose_name="Время начала бронирования",
     )
     time_close = models.TimeField(
         default=datetime.strptime(os.getenv("TIME_CLOSE", "00:00:00"), "%H:%M:%S").time(),

@@ -2,7 +2,7 @@ from django import forms
 
 from users.mixins import FormControlMixin
 
-from .models import Booking, Category, Table, Feedback
+from .models import Booking, Category, Feedback, Table
 
 
 class FeedbackForm(FormControlMixin, forms.ModelForm):
