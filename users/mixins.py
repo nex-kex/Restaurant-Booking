@@ -24,6 +24,7 @@ class PhoneNumberMixin:
 
 class StaffRequiredMixin:
     """Миксин для проверки staff статуса."""
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_staff:
             raise PermissionDenied("У вас нет прав для выполнения этого действия")
@@ -32,6 +33,7 @@ class StaffRequiredMixin:
 
 class PersonalDataMixin:
     """Миксин для проверки прав на доступ к данным о других пользователях."""
+
     def get_object(self, **kwargs):
         user_profile = super().get_object()
         user = self.request.user

@@ -1,15 +1,16 @@
 from datetime import timedelta
-from django.utils import timezone
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
-from .forms import BookingForm, CategoryForm, TableForm, FeedbackForm
-from .models import Booking, Category, Table, Feedback
 from users.mixins import StaffRequiredMixin
+
+from .forms import BookingForm, CategoryForm, FeedbackForm, TableForm
+from .models import Booking, Category, Feedback, Table
 
 
 class MainPageTemplateView(TemplateView):
@@ -25,10 +26,10 @@ class MainPageTemplateView(TemplateView):
         form = FeedbackForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('booking:main')
+            return redirect("booking:main")
         # Если форма невалидна, показываем с ошибками
         context = self.get_context_data()
-        context['feedback_form'] = form
+        context["feedback_form"] = form
         return self.render_to_response(context)
 
 
@@ -87,8 +88,13 @@ class CategoryListView(ListView):
         for category in context["categories"]:
             total_table_count = Table.objects.filter(category=category).count()
             available_table_count = Table.objects.filter(category=category, is_available=True).count()
-            categories_with_count.append({"category": category, "available_table_count": available_table_count,
-                                          "total_table_count": total_table_count})
+            categories_with_count.append(
+                {
+                    "category": category,
+                    "available_table_count": available_table_count,
+                    "total_table_count": total_table_count,
+                }
+            )
         context["categories_with_count"] = categories_with_count
         return context
 
@@ -177,42 +183,35 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
         table = form.cleaned_data.get("table")
         date = form.cleaned_data.get("date")
         duration = form.cleaned_data.get("duration")
-        timedelta_duration = timedelta(
-            hours=duration.hour,
-            minutes=duration.minute,
-            seconds=duration.second
-        )
+        timedelta_duration = timedelta(hours=duration.hour, minutes=duration.minute, seconds=duration.second)
 
         start_datetime = date
         end_datetime = start_datetime + timedelta_duration
         print(start_datetime, end_datetime)
 
-        overlapping_bookings = Booking.objects.filter(
-            table=table,
-            status="active"
-        ).exclude(pk=booking_instance.pk if booking_instance.pk else None)
+        overlapping_bookings = Booking.objects.filter(table=table, status="active").exclude(
+            pk=booking_instance.pk if booking_instance.pk else None
+        )
 
         for booking in overlapping_bookings:
             # Получаем время начала и окончания существующей брони
             booking_start = booking.date
 
             booking_duration = timedelta(
-                hours=booking.duration.hour,
-                minutes=booking.duration.minute,
-                seconds=booking.duration.second
+                hours=booking.duration.hour, minutes=booking.duration.minute, seconds=booking.duration.second
             )
             booking_end = booking_start + booking_duration
 
             # Проверяем пересечение временных интервалов
-            if (start_datetime <= booking_start < end_datetime) or (start_datetime < booking_end <= end_datetime) \
-                    or (start_datetime <= booking_start <= booking_end <= end_datetime):
+            if (
+                (start_datetime <= booking_start < end_datetime)
+                or (start_datetime < booking_end <= end_datetime)
+                or (start_datetime <= booking_start <= booking_end <= end_datetime)
+            ):
                 print(booking_start, booking_end)
-                start = timezone.localtime(booking_start).strftime('%H:%M:%S')
-                end = timezone.localtime(booking_end).strftime('%H:%M:%S')
-                form.add_error(
-                    "table",
-                    f"Этот стол уже забронирован с {start} до {end}"
-                )
+                start = timezone.localtime(booking_start).strftime("%H:%M:%S")
+                end = timezone.localtime(booking_end).strftime("%H:%M:%S")
+                form.add_error("table", f"Этот стол уже забронирован с {start} до {end}")
                 return self.form_invalid(form)
 
         booking_instance.save()

@@ -13,10 +13,11 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
 from booking.models import Booking
+
 from .forms import (CustomUserCreationForm, LoginForm, PasswordEditForm,
                     UserEditForm)
-from .models import CustomUser
 from .mixins import PersonalDataMixin
+from .models import CustomUser
 
 
 class CustomLoginView(LoginView):
