@@ -16,7 +16,7 @@ from booking.models import Booking
 
 from .forms import (CustomUserCreationForm, LoginForm, PasswordEditForm,
                     UserEditForm)
-from .mixins import PersonalDataMixin
+from .mixins import PersonalDataMixin, StaffRequiredMixin
 from .models import CustomUser
 
 
@@ -60,7 +60,7 @@ class UserDetailView(LoginRequiredMixin, PersonalDataMixin, DetailView):
         return context
 
 
-class UserListView(LoginRequiredMixin, PersonalDataMixin, ListView):
+class UserListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     model = CustomUser
 
 
@@ -111,7 +111,7 @@ class UserUpdatePasswordView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("booking:main")
 
 
-class UserDeleteView(LoginRequiredMixin, DeleteView):
+class UserDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = CustomUser
     success_url = reverse_lazy("booking:main")
 
