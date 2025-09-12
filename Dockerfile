@@ -1,8 +1,13 @@
-# Указываем базовый образ
 FROM python:3.13-slim
 
 # Устанавливаем рабочую директорию в контейнере
-WORKDIR /materials
+WORKDIR /app
+
+# Установка системных зависимостей
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Копируем файлы для Poetry
 COPY pyproject.toml poetry.lock ./
@@ -15,8 +20,9 @@ RUN pip install poetry && \
 # Копируем остальные файлы проекта в контейнер
 COPY . .
 
-# Открываем порт 8000 для взаимодействия с приложением
+# Собираем статические файлы
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
-# Определяем команду для запуска приложения
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
