@@ -273,6 +273,33 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("booking:booking-detail", kwargs={"pk": self.object.pk})
 
 
+class BookingUpdateStatusView(LoginRequiredMixin, UpdateView):
+    model = Booking
+    fields = ["status"]
+
+    # Запрещает пользователю изменять чужие бронирования
+    def get_object(self, **kwargs):
+        user_booking = super().get_object()
+        user = self.request.user
+        if user != user_booking.user and not self.request.user.is_staff:
+            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return user_booking
+
+    # Уведомляет стафф о том, что пользователь изменил статус бронирования
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = self.request.user
+        Feedback.objects.create(
+            name=f"{user}",
+            phone_number=f"{user.phone_number}",
+            text=f"Пользователь изменил статус бронирования номер {self.object.id} " f"на '{self.object.status}'.",
+        )
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy("booking:booking-detail", kwargs={"pk": self.object.pk})
+
+
 class BookingDeleteView(LoginRequiredMixin, DeleteView):
     model = Booking
 

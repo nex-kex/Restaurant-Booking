@@ -26,6 +26,12 @@
                     <p class="card-text">
                         Продолжительность: {{ booking.duration | time:"H:i:s" }}
                     </p>
+                    <p class="card-text">
+                        Статус: {{ booking.get_status_display }}
+                    </p>
+                    <p class="card-text">
+                        Номер пользователя: {{ booking.user.phone_number }}
+                    </p>
 
                     <a href="{% url 'booking:booking-update' booking.pk %}"
                        class="btn btn-outline-secondary">Редактировать</a>

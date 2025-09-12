@@ -15,6 +15,7 @@
         <tr>
             <th scope="col">ID бронирования</th>
             <th scope="col">Дата</th>
+            <th scope="col">Пользователь</th>
             <th scope="col">Номер столика</th>
             <th scope="col">Продолжительность</th>
             <th scope="col">Количество персон</th>
@@ -30,10 +31,11 @@
                 </a>
             </th>
             <td>{{ booking.date | date:"d.m.Y H:i:s" }}</td>
+            <td>{{ booking.user.phone_number }}</td>
             <td>{{ booking.table }}</td>
             <td>{{ booking.duration | time:"H:i:s" }}</td>
             <td>{{ booking.people }}</td>
-            <td>{{ booking.get_status_display  }}</td>
+            <td>{{ booking.get_status_display }}</td>
         </tr>
         {% endfor %}
         </tbody>
