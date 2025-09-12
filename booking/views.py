@@ -182,6 +182,16 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
         user = self.request.user
         booking_instance.user = user
 
+        seats = form.cleaned_data.get("people")
+        table = form.cleaned_data.get("table")
+
+        # Проверяет, чтобы количество людей не превышало число доступных мест
+        if seats and table and seats > table.seats:
+            form.add_error(
+                "table", f"Стол который вы выбрали рассчитан на {table.seats} мест. Выберете другой столик."
+            )
+            return self.form_invalid(form)
+
         # Проверяем доступность стола
         table = form.cleaned_data.get("table")
         date = form.cleaned_data.get("date")
@@ -219,18 +229,6 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
 
         booking_instance.save()
         return super().form_valid(form)
-
-    def form_invalid(self, form):
-        seats = form.cleaned_data.get("people")
-        table = form.cleaned_data.get("table")
-
-        # Проверяет, чтобы количество людей не превышало число доступных мест
-        if seats and table and seats > table.seats:
-            form.add_error(
-                "table", f"Стол который вы выбрали рассчитан на {table.seats} мест. Выберете другой столик."
-            )
-
-        return self.render_to_response(self.get_context_data(form=form))
 
 
 class BookingDetailView(LoginRequiredMixin, DetailView):

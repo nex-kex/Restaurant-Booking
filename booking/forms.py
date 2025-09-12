@@ -34,7 +34,6 @@ class BookingForm(FormControlMixin, forms.ModelForm):
         model = Booking
         fields = "__all__"
         exclude = ["user", "status"]
-        widgets = {"date": forms.DateInput(attrs={"type": "date"})}
 
     # Сортировка столов для бронирования - выбрать можно только из тех, что доступны
     def __init__(self, *args, **kwargs):
