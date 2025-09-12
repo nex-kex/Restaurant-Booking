@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -171,7 +172,9 @@ class TableDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
 class BookingCreateView(LoginRequiredMixin, CreateView):
     model = Booking
     form_class = BookingForm
-    success_url = reverse_lazy("booking:booking-list")
+
+    def get_success_url(self):
+        return reverse_lazy("users:user-detail", kwargs={"pk": self.request.user.pk})
 
     def form_valid(self, form):
         # Сразу сохраняет пользователя, без необходимости указывать самостоятельно
@@ -233,19 +236,53 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
 class BookingDetailView(LoginRequiredMixin, DetailView):
     model = Booking
 
+    # Запрещает пользователю просматривать чужие бронирования
+    def get_object(self, **kwargs):
+        user_booking = super().get_object()
+        user = self.request.user
+        if user != user_booking.user and not self.request.user.is_staff:
+            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return user_booking
+
 
 class BookingListView(LoginRequiredMixin, ListView):
     model = Booking
+
+    # Запрещает пользователю просматривать чужие бронирования
+    def get_queryset(self, **kwargs):
+        user_bookings = super().get_queryset()
+        user = self.request.user
+        if not self.request.user.is_staff:
+            return user_bookings.filter(user=user)
+        return user_bookings
 
 
 class BookingUpdateView(LoginRequiredMixin, UpdateView):
     model = Booking
     form_class = BookingForm
 
+    # Запрещает пользователю изменять чужие бронирования
+    def get_object(self, **kwargs):
+        user_booking = super().get_object()
+        user = self.request.user
+        if user != user_booking.user and not self.request.user.is_staff:
+            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return user_booking
+
     def get_success_url(self):
         return reverse_lazy("booking:booking-detail", kwargs={"pk": self.object.pk})
 
 
-class BookingDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
+class BookingDeleteView(LoginRequiredMixin, DeleteView):
     model = Booking
-    success_url = reverse_lazy("booking:booking-list")
+
+    def get_success_url(self):
+        return reverse_lazy("users:user-detail", kwargs={"pk": self.request.user.pk})
+
+    # Запрещает пользователю удалять чужие бронирования
+    def get_object(self, **kwargs):
+        user_booking = super().get_object()
+        user = self.request.user
+        if user != user_booking.user and not self.request.user.is_staff:
+            raise PermissionDenied("У вас нет прав для доступа к этой странице.")
+        return user_booking
