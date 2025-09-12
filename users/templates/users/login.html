@@ -1,0 +1,23 @@
+{% extends "booking/base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card border-primary m-4 p-3">
+            <div class="card-body">
+                <h2 class="mb-3">Вход</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-primary" type="submit">Войти</button>
+                    <a class="btn btn-outline-primary" href="{% url 'users:new-password-request' %}">Не помню пароль</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+{% endblock %}

@@ -3,14 +3,15 @@ name = "restaurantbooking"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Mark Volkov",email = "markasch67@gmail.com"}
+    { name = "Mark Volkov", email = "markasch67@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "django (>=5.2.5,<6.0.0)",
     "dotenv (>=0.9.9,<0.10.0)",
-    "psycopg2-binary (>=2.9.10,<3.0.0)"
+    "psycopg2-binary (>=2.9.10,<3.0.0)",
+    "gunicorn (>=23.0.0,<24.0.0)"
 ]
 
 
@@ -26,3 +27,9 @@ mypy = "^1.17.1"
 
 [tool.black]
 line-length = 119
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+    "config/",
+]

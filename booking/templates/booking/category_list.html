@@ -1,0 +1,44 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Категории{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row text-center">
+        {% for category_data in categories_with_count %}
+        <div class="col-6">
+            <div class="card my-3">
+                <div class="card-header">
+                    <h2>{{ category_data.category.name }}</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Описание: {{ category_data.category.description }}</p>
+                    <p class="card-text">
+                        {% if user.is_staff %}
+                        <p>
+                            Количество доступных столиков: {{ category_data.available_table_count }}
+                        </p>
+                        Количество столиков всего:
+                        <a class="btn btn-outline-primary"
+                           href="{% url 'booking:category-tables' category_data.category.pk %}">
+                            {{ category_data.total_table_count }}
+                        </a>
+
+                        {% else %}
+                        Количество доступных столиков:
+                        <a class="btn btn-outline-primary"
+                           href="{% url 'booking:category-tables' category_data.category.pk %}">
+                            {{ category_data.available_table_count }}
+                        </a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

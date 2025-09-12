@@ -1,0 +1,33 @@
+{% block content %}
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card border-primary m-4 p-3">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    {% if object %}
+                    <button type="submit" class="btn btn-outline-primary">
+                        Сохранить
+                    </button>
+                    <a type="submit" class="btn btn-outline-secondary" href="{% url 'users:user-detail' user.pk %}">
+                        Отмена
+                    </a>
+
+                    {% else %}
+                    <button type="submit" class="btn btn-outline-primary">
+                        Создать
+                    </button>
+
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+{% endblock %}

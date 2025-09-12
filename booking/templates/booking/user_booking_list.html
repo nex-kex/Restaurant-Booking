@@ -1,0 +1,51 @@
+{% block content %}
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card border-primary m-3 p-3">
+            <h1 class="text-center m-3">
+                История бронирований
+            </h1>
+            </h1>
+
+            <div class="container">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Пользователь</th>
+                        <th scope="col">Столик</th>
+                        <th scope="col">Продолжительность</th>
+                        <th scope="col">Количество персон</th>
+                        <th scope="col">Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <th scope="row">
+                            <a class="btn btn-outline-secondary" href="{% url 'booking:booking-detail' booking.pk %}">
+                                {{ booking.pk }}
+                            </a>
+                        </th>
+                        <td>{{ booking.date | date:"d.m.Y" }}</td>
+                        <td>{{ booking.user.phone_number }}</td>
+                        <td>{{ booking.table }}</td>
+                        <td>{{ booking.duration | time:"H:i:s" }}</td>
+                        <td>{{ booking.people }}</td>
+                        <td>
+                            <a class="btn btn-outline-secondary" href="{% url 'booking:booking-update-status' booking.pk %}">
+                                {{ booking.get_status_display }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+{% endblock %}

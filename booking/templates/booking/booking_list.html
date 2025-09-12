@@ -1,0 +1,44 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Список бронирований{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center m-3">
+    Список бронирований
+    <hr class="border border-primary border-1 opacity-75">
+</h1>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID бронирования</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Номер столика</th>
+            <th scope="col">Продолжительность</th>
+            <th scope="col">Количество персон</th>
+            <th scope="col">Статус</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for booking in object_list %}
+        <tr>
+            <th scope="row">
+                <a class="btn btn-outline-secondary" href="{% url 'booking:booking-detail' booking.pk %}">
+                    {{ booking.pk }}
+                </a>
+            </th>
+            <td>{{ booking.date | date:"d.m.Y H:i:s" }}</td>
+            <td>{{ booking.user.phone_number }}</td>
+            <td>{{ booking.table }}</td>
+            <td>{{ booking.duration | time:"H:i:s" }}</td>
+            <td>{{ booking.people }}</td>
+            <td>{{ booking.get_status_display }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

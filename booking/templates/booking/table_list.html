@@ -1,0 +1,38 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Все столики{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        {% for table in object_list %}
+        <div class="col-3">
+            <div class="card my-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Столик для {{ table.seats }}-х</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <h1 class="card-title pricing-card-title">
+                        {{ table.price }} руб.
+                    </h1>
+                    {% if table.category %}
+                        <p class="card-text"><small class="text-body-secondary">
+                            {{ table.category }}
+                        </small></p>
+                    {% endif %}
+
+                    {% if not table.is_available %}
+                    <p><small>Сейчас не доступно</small></p>
+                    {% endif %}
+                    <a href="{% url 'booking:table-detail' table.pk %}"
+                       class="btn btn-lg btn-block btn-outline-primary m-1">Подробнее</a>
+                </div>
+            </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

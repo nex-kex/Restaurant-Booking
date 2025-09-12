@@ -1,0 +1,53 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Столик{% endblock %}
+
+{% block content %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+        {{ object }}
+    </h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="card m-3">
+                <div class="card-body">
+                    <h3>Столик для {{ object.seats }}-х чел.</h3>
+                    {% if object.category %}
+                    <h3>Категория:</h3>
+                        <p class="card-text">
+                            {{ object.category }}
+                        </p>
+                    {% endif %}
+                    <h3>Цена:</h3>
+                    <p class="card-text">
+                        {{ object.price }} руб.
+                    </p>
+                    {% if object.comment %}
+                    <h3>Комментарии:</h3>
+                    <p class="card-text">
+                        {{ object.comment }}
+                    </p>
+                    {% endif %}
+                    <h3>Время обслуживания:</h3>
+                    <p class="card-text">
+                        Столик обслуживается с {{ object.time_open | time:"H:i" }} до {{ object.time_close | time:"H:i" }}
+                    </p>
+
+                    {% if user.is_staff %}
+                        <a href="{% url 'booking:table-update' object.pk %}" class="btn btn-outline-secondary">Редактировать</a>
+                        <a href="{% url 'booking:table-delete' object.pk %}" class="btn btn-outline-danger">Удалить</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Бронирование{% endblock %}
+
+{% block content %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+        Бронирование номер {{ object.pk }}
+    </h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="card m-3">
+                <div class="card-body">
+                    <h3 class="mb-3">Бронирование на {{ booking.date | date:"d.m.Y" }}</h3>
+                    <p class="card-text">
+                        Номер столика: {{ object.table.id }}
+                    </p>
+                    <p class="card-text">
+                        Количество ожидаемых персон: {{ object.people }}
+                    </p>
+                    <p class="card-text">
+                        Продолжительность: {{ booking.duration | time:"H:i:s" }}
+                    </p>
+                    <p class="card-text">
+                        Статус: {{ booking.get_status_display }}
+                    </p>
+                    <p class="card-text">
+                        Номер пользователя: {{ booking.user.phone_number }}
+                    </p>
+
+                    <a href="{% url 'booking:booking-update' booking.pk %}"
+                       class="btn btn-outline-secondary">Редактировать</a>
+                    <a href="{% url 'booking:booking-delete' booking.pk %}"
+                       class="btn btn-outline-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+{% endblock %}

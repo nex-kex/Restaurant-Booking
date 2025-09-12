@@ -1,0 +1,222 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}О ресторане{% endblock %}
+
+{% block content %}
+<h1 class="text-center m-3">
+    О ресторане
+    <hr class="border border-primary border-1 opacity-75">
+</h1>
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card border-primary m-4 p-4 shadow-lg rounded-4">
+            <h3 class="text-center text-primary fw-bold mb-4">
+                История ресторана
+                <hr class="border border-primary border-2 opacity-50 mt-3">
+            </h3>
+            <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                <p class="mb-0 fst-italic">
+                    Идея ресторана родилась из любви его основателя, Антонио Риццоли, к своей малой родине — небольшому
+                    городку в регионе Эмилия-Романья. Переехав в Москву 15 лет назад, он скучал по аутентичным вкусам и
+                    той
+                    особой атмосфере гостеприимства, которая царит в каждом итальянском доме.<br>
+                    Сначала это был небольшой семейный тратториа на окраине, куда друзья приходили за порцией пасты и
+                    душевной беседы. Слово о вкусной еде и невероятной энергии этого места разнеслось быстро. Спустя
+                    пять
+                    лет траттория превратилась в ресторан, а еще через несколько лет ресторан обрел новый дом в самом
+                    сердце города.<br>
+                    Сегодня, спустя десятилетие, мы остаемся верны своей первоначальной философии: делиться с гостями
+                    подлинной Италией через щедрость стола, искренность общения и искусство slow life.
+                </p>
+            </div>
+        </div>
+
+        <div class="card border-primary m-4 p-4 shadow-lg rounded-4">
+            <h3 class="text-center text-primary fw-bold mb-4">
+                Миссия и ценности
+                <hr class="border border-primary border-2 opacity-50 mt-3">
+            </h3>
+
+            <h5 class="text-primary"><i class="bi bi-rocket-takeoff me-2"></i>Наша миссия:</h5>
+            <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                <p class="mb-0 fst-italic">Дарить гостям ощущение «Прекрасной жизни» — момента настоящего счастья,
+                    рожденного от единства превосходной кухни, безупречного сервиса и теплой атмосферы.</p>
+            </div>
+
+            <h5 class="text-primary mb-3"><i class="bi bi-heart me-2"></i>Наши ценности:</h5>
+
+                <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                    <i class="bi bi-fire text-danger fs-5 me-3"></i>
+                    <div>
+                        <strong class="text-dark">Страсть:</strong> Мы страстно любим то, что делаем. Это чувствуется в
+                        каждом нашем блюде.
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                    <i class="bi bi-shield-check text-success fs-5 me-3"></i>
+                    <div>
+                        <strong class="text-dark">Аутентичность:</strong> Мы уважаем традиции и стремимся к подлинности
+                        вкусов и гостеприимства.
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                    <i class="bi bi-people-fill text-warning fs-5 me-3"></i>
+                    <div>
+                        <strong class="text-dark">Семейность:</strong> Мы относимся к нашим гостям и сотрудникам как к
+                        большой семье.
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                    <i class="bi bi-award text-info fs-5 me-3"></i>
+                    <div>
+                        <strong class="text-dark">Качество:</strong> Мы никогда не идем на компромиссы в выборе
+                        ингредиентов.
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                    <i class="bi bi-gift-fill text-purple fs-5 me-3"></i>
+                    <div>
+                        <strong class="text-dark">Щедрость:</strong> Щедрые порции, щедрое отношение, щедрость души.
+                    </div>
+                </div>
+        </div>
+
+        <div class="card border-primary m-4 p-4 shadow-lg rounded-4">
+            <h3 class="text-center text-primary fw-bold mb-4">
+                Команда
+                <hr class="border border-primary border-2 opacity-50 mt-3">
+            </h3>
+
+            <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                <p class="mb-0 fst-italic">Наша команда — это семья профессионалов, объединенных любовью к итальянской
+                    кухне и культуре гостеприимства. Каждый из нас вносит свой вклад в создание неповторимой атмосферы
+                    ресторана.</p>
+            </div>
+
+            <div class="card p-2 m-2 d-flex flex-row">
+                <div class="flex-shrink-0">
+                    <img src="/media/team/AR.jpg" alt="" class="img-fluid rounded-start" style="max-width: 100px;">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title text-primary fw-bold">
+                        Антонио Риццоли
+                    </h3>
+                    <p class="card-text"><small class="text-body-secondary">
+                        Основатель и бренд-шеф
+                    </small></p>
+                    <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                        <p class="card-text mb-0 fst-italic">
+                            Родился в Эмилия-Романье, вырос на кухне у своей бабушки. Окончил кулинарную
+                            школу в Парме. В Россию переехал 15 лет назад, чтобы делиться настоящей итальянской кухней.
+                            Лично следит за соблюдением всех традиций и отвечает за авторские блюда в меню. Его энергия
+                            и
+                            любовь к своему делу заряжают всю команду.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-2 m-2 d-flex flex-row">
+                <div class="flex-shrink-0">
+                    <img src="/media/team/MO.jpg" alt="" class="img-fluid rounded-start" style="max-width: 100px;">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title text-primary fw-bold">
+                        Мария Орсини
+                    </h3>
+                    <p class="card-text"><small class="text-body-secondary">
+                        Шеф-повар
+                    </small></p>
+                    <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                        <p class="card-text mb-0 fst-italic">
+                            Прошла путь от повара в том самом первом тратториа до шефа главной кухни. Обучалась в
+                            Милане и работала в ресторанах Лигурии. Мария — виртуоз в области пасты и морепродуктов. Ее
+                            ризотто с трюфелем и морепродуктами — визитная карточка ресторана. Требовательна к качеству
+                            и
+                            технике, но при этом является душой кухни.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-2 m-2 d-flex flex-row">
+                <div class="flex-shrink-0">
+                    <img src="/media/team/DK.jpg" alt="" class="img-fluid rounded-start" style="max-width: 100px;">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title text-primary fw-bold">
+                        Дмитрий Козлов
+                    </h3>
+                    <p class="card-text"><small class="text-body-secondary">
+                        Управляющий / Маэстро д'отель
+                    </small></p>
+                    <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                        <p class="card-text mb-0 fst-italic">
+                            Опыт в ресторанном бизнесе более 12 лет. Выпускник швейцарской школы гостиничного
+                            менеджмента. Настоящий профессионал, который видит гостя насквозь и всегда знает, как
+                            сделать
+                            его вечер
+                            идеальным. Безупречно управляет работой зала и решает любые вопросы, обеспечивая безупречный
+                            сервис.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-2 m-2 d-flex flex-row">
+                <div class="flex-shrink-0">
+                    <img src="/media/team/EP.jpg" alt="" class="img-fluid rounded-start" style="max-width: 100px;">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title text-primary fw-bold">
+                        Елена Петрова
+                    </h3>
+                    <p class="card-text"><small class="text-body-secondary">
+                        Сомелье
+                    </small></p>
+                    <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                        <p class="card-text mb-0 fst-italic">
+                            Сертифицированный эксперт по итальянским винам (диплом AIS). Неоднократно проходила
+                            стажировки на винодельнях в Пьемонте и Тоскане. Елена с легкостью подберет для вас идеальное
+                            вино,
+                            которое раскроет вкус блюда и станет отдельным элементом удовольствия. Проводит
+                            увлекательные
+                            винные
+                            дегустации для гостей.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-2 m-2 d-flex flex-row">
+                <div class="flex-shrink-0">
+                    <img src="/media/team/AK.jpg" alt="" class="img-fluid rounded-start" style="max-width: 100px;">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title text-primary fw-bold">
+                        Александр Котов
+                    </h3>
+                    <p class="card-text"><small class="text-body-secondary">
+                        Шеф-кондитер
+                    </small></p>
+                    <div class="mission-section mb-4 p-3 bg-light rounded-3">
+                        <p class="card-text mb-0 fst-italic">
+                            Получил признание за свой тирамису, который критики называют «лучшим в городе». Работал
+                            во Франции, что позволило ему объединить французские техники и итальянскую душевность в
+                            десертах. Его
+                            творения — это не просто сладости, а завершающие аккорды идеального ужина.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Список пользователей{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center m-3">
+    Список пользователей
+    <hr class="border border-primary border-1 opacity-75">
+</h1>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID пользователя</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in object_list %}
+        <tr>
+            <th scope="row">
+                <a class="btn btn-outline-secondary" href="{% url 'users:user-detail' user.pk %}">
+                    {{ user.pk }}
+                </a>
+            </th>
+            <td>{{ user }}</td>
+            <td>{{ user.phone_number }}</td>
+            <td>{{ user.email  }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

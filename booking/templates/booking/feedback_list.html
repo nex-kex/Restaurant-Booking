@@ -1,0 +1,71 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Обратная связь{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center m-3">
+    Обратная связь
+    <hr class="border border-primary border-1 opacity-75">
+</h1>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Email</th>
+            <th scope="col">Сообщение</th>
+            <th scope="col">Обработана</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for feedback in object_list %}
+        <tr>
+            <th scope="row">
+                <a class="btn btn-outline-secondary" href="{% url 'booking:feedback-detail' feedback.pk %}">
+                    {{ feedback.pk }}
+                </a>
+            </th>
+            <td>{{ feedback.created_at | date:"d.m.Y" }}</td>
+            <td>{{ feedback.name }}</td>
+            <td>{{ feedback.email | time:"H:i:s" }}</td>
+            <td>{{ feedback.text }}</td>
+            <td>
+                {% if feedback.is_solved %}
+                <a class="btn btn-outline-success" href="{% url 'booking:feedback-change-status' feedback.pk %}">
+                    Решена
+                </a>
+                {% else %}
+                <a class="btn btn-outline-danger" href="{% url 'booking:feedback-change-status' feedback.pk %}">
+                    Решить
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1"><<</a>
+            <a href="?page={{ page_obj.previous_page_number }}"><</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">></a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">>></a>
+        {% endif %}
+    </span>
+    </div>
+</div>
+{% endblock %}
